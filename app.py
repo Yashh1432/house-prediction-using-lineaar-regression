@@ -5,8 +5,8 @@ import plotly.express as px
 
 def generate_house_data(n_sample=100):
     np.random.seed(50)
-    size=np.random.normal(1400,50,n_sample)
-    price=size * np.random.normal(0,50,n_sample)
+    size = np.random.normal(1400, 50, n_sample)
+    price = size * 50 + np.random.normal(0, 50, n_sample)
     return pd.DataFrame({'size': size, 'price': price})
 
 
@@ -26,7 +26,7 @@ def train_model():
     return model
 
 def main():
-    st.wrlite("# House Price Prediction APP")
+    st.write("# House Price Prediction APP")
     
     st.write("This is a simple app to predict house prices based on size.")
     
@@ -35,14 +35,16 @@ def main():
     
     if st.button('Predict'):
         predicted_price = model.predict([[size]])
-        st.success(f"The predicted price for a house of size {size} is {predicted_price[0]:,.2f}")
-        st.write("The model was trained on synthetic data and may not reflect real-world prices.")      
-        st.write("Note: This is a simple linear regression model and may not reflect real-world prices.")
+        predicted_price_value = predicted_price.item()
+        st.success(f'The predicted price for a house of size is : ${predicted_price_value:,.2f}')
+            
+        # st.write("The model was trained on synthetic data and may not reflect real-world prices.")      
+        # st.write("Note: This is a simple linear regression model and may not reflect real-world prices.")
         
         df = generate_house_data()
         
         fig = px.scatter(df, x='size', y='price', title=' Size vs House Price')
-        fig.add_scatter(x=[size], y=[predicted_price[0]], 
+        fig.add_scatter(x=[size], y=[predicted_price_value], 
                 mode='markers',
                 marker=dict(color='red', size=10),
                 name='Predicted Price')
